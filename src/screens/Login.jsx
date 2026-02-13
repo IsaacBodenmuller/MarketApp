@@ -30,7 +30,7 @@ export default function Login() {
 
       await login(username, password, remember);
 
-      navigate("/dashboard");
+      navigate("/home/dashboard");
     } catch (err) {
       console.log(err);
       setError("Credenciais inválidas");

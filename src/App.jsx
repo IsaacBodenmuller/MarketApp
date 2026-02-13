@@ -1,31 +1,38 @@
 import { Navigate, Route, Routes } from "react-router-dom";
 import Login from "./screens/login";
-import CreateAccount from "./screens/CreateAccount";
-import ProtectedRoute from "./components/ProtectedRoute";
-
-function Dashboard() {
-  return <h1>Área logada</h1>;
-}
+import ProtectedRoute from "./context/ProtectedRoute";
+import LandingPage from "./screens/LandingPage";
+import Dashboard from "./screens/Dashboard";
+import { useAuth } from "./context/useAuth";
+import Loading from "./components/Loading";
+import Account from "./screens/Account";
 
 export default function App() {
+  const { loading } = useAuth();
+
+  if (loading) {
+    return <Loading />;
+  }
+
   return (
     <Routes>
-      <Route path="/" element={<Navigate to="/dashboard" replace />} />
-
       <Route path="/login" element={<Login />} />
-      <Route path="/createaccount" element={<CreateAccount />} />
       {/* <Route path="/forgetpassword" element={<ForgetPassword />} /> */}
 
       <Route
-        path="/dashboard"
+        path="/home"
         element={
           <ProtectedRoute>
-            <Dashboard />
+            <LandingPage />
           </ProtectedRoute>
         }
-      />
+      >
+        <Route index element={<Navigate to="dashboard" replace />} />
+        <Route path="dashboard" element={<Dashboard />} />
+        <Route path="account" element={<Account />} />
+      </Route>
 
-      <Route path="*" element={<h1>Not Found</h1>} />
+      <Route path="*" element={<Navigate to="/home/dashboard" replace />} />
     </Routes>
   );
 }
