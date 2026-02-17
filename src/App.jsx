@@ -6,6 +6,14 @@ import Dashboard from "./screens/Dashboard";
 import { useAuth } from "./context/useAuth";
 import Loading from "./components/Loading";
 import Account from "./screens/Account";
+import Sales from "./screens/Sales";
+import Checkout from "./screens/Checkout";
+import Payments from "./screens/Payments";
+import Products from "./screens/Products";
+import Categories from "./screens/Categories";
+import Customers from "./screens/Customers";
+import Suppliers from "./screens/Suppliers";
+import Handling from "./screens/Handling";
 
 export default function App() {
   const { loading } = useAuth();
@@ -30,6 +38,14 @@ export default function App() {
         <Route index element={<Navigate to="dashboard" replace />} />
         <Route path="dashboard" element={<Dashboard />} />
         <Route path="account" element={<Account />} />
+        <Route path="sales" element={<Sales />} />
+        <Route path="checkout" element={<Checkout />} />
+        <Route path="payments" element={<Payments />} />
+        <Route path="products" element={<Products />} />
+        <Route path="categories" element={<Categories />} />
+        <Route path="customers" element={<Customers />} />
+        <Route path="suppliers" element={<Suppliers />} />
+        <Route path="handling" element={<Handling />} />
       </Route>
 
       <Route path="*" element={<Navigate to="/home/dashboard" replace />} />
