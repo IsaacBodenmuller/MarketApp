@@ -1,12 +1,14 @@
 import { Navigate } from "react-router-dom";
 import { useAuth } from "./useAuth";
-import Loading from "../components/Loading";
+import { hasPermission } from "../auth/permissions";
 
-export default function ProtectedRoute({ children }) {
-  const { accessToken } = useAuth();
+export default function ProtectedRoute({ children, permission }) {
+  const { accessToken, user } = useAuth();
 
-  if (!accessToken) {
-    return <Navigate to="/login" replace />;
+  if (!accessToken || !user) return <Navigate to="/login" replace />;
+
+  if (permission && !hasPermission(user, permission)) {
+    return <Navigate to="/home/dashboard" />;
   }
 
   return children;

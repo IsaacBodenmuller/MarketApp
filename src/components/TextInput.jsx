@@ -4,6 +4,7 @@ export default function TextInput({
   icon: IconComponent,
   value,
   onChange,
+  isRequired = false,
 }) {
   return (
     <div className="flex border bg-gray-50 border-gray-300 rounded-md w-full h-8 text-gray-700 focus:outline-1 outline-gray-400 px-2 text-xs">
@@ -13,6 +14,7 @@ export default function TextInput({
         placeholder={placeholder}
         value={value}
         onChange={onChange}
+        required={isRequired}
       />
       <div className="right-0 relative cursor-pointer">
         {IconComponent && <IconComponent className="size-4" />}

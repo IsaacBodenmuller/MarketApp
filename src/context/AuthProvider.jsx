@@ -9,26 +9,34 @@ export function AuthProvider({ children }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    async function tryRefresh() {
+    async function initAuth() {
+      const storedToken = localStorage.getItem("accessToken");
+
+      if (storedToken) {
+        setToken(storedToken);
+        setAccessToken(storedToken);
+        setUser(decodeToken(storedToken));
+        setLoading(false);
+        return;
+      }
+
       try {
         const response = await api.post("/auth/refresh");
-        setToken(response.data.access_token);
-        setAccessToken(response.data.access_token);
+        const token = response.data.access_token;
+
+        localStorage.setItem("accessToken", token);
+        setToken(token);
+        setAccessToken(token);
+        setUser(decodeToken(token));
       } catch {
-        setAccessToken(null);
+        logout();
       } finally {
         setLoading(false);
       }
     }
 
-    tryRefresh();
+    initAuth();
   }, []);
-
-  useEffect(() => {
-    if (accessToken) {
-      setUser(decodeToken(accessToken));
-    }
-  }, [accessToken]);
 
   async function login(username, password, remember) {
     const response = await api.post("/auth/login", {
@@ -37,11 +45,16 @@ export function AuthProvider({ children }) {
       remember,
     });
 
-    setToken(response.data.access_token);
-    setAccessToken(response.data.access_token);
+    const token = response.data.access_token;
+
+    localStorage.setItem("accessToken", token);
+    setToken(token);
+    setAccessToken(token);
+    setUser(decodeToken(token));
   }
 
   function logout() {
+    localStorage.removeItem("accessToken");
     setToken(null);
     setAccessToken(null);
     setUser(null);

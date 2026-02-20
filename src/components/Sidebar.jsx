@@ -333,11 +333,13 @@ export default function Sidebar() {
           </div>
           <div
             className={`flex flex-col transition-all duration-200 ${
-              collapsed ? "opacity-0 w-0 overflow-hidden" : "opacity-100 w-auto"
+              collapsed ? "opacity-0 w-0 overflow-hidden" : "opacity-100 w-37.5"
             }`}
           >
             <span className="text-xs text-white">{user?.username}</span>
-            <span className="text-[10px] text-gray-400">{user?.email}</span>
+            <span className="text-[10px] text-gray-400 text-nowrap text-ellipsis overflow-hidden">
+              {user?.email}
+            </span>
           </div>
         </div>
         <div

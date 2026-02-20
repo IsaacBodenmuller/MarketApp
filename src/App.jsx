@@ -38,14 +38,56 @@ export default function App() {
         <Route index element={<Navigate to="dashboard" replace />} />
         <Route path="dashboard" element={<Dashboard />} />
         <Route path="account" element={<Account />} />
-        <Route path="sales" element={<Sales />} />
+        <Route
+          path="sales"
+          element={
+            <ProtectedRoute>
+              <Sales />
+            </ProtectedRoute>
+          }
+        />
         <Route path="checkout" element={<Checkout />} />
-        <Route path="payments" element={<Payments />} />
-        <Route path="products" element={<Products />} />
-        <Route path="categories" element={<Categories />} />
+        <Route
+          path="payments"
+          element={
+            <ProtectedRoute>
+              <Payments />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="products"
+          element={
+            <ProtectedRoute>
+              <Products />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="categories"
+          element={
+            <ProtectedRoute>
+              <Categories />
+            </ProtectedRoute>
+          }
+        />
         <Route path="customers" element={<Customers />} />
-        <Route path="suppliers" element={<Suppliers />} />
-        <Route path="handling" element={<Handling />} />
+        <Route
+          path="suppliers"
+          element={
+            <ProtectedRoute>
+              <Suppliers />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="handling"
+          element={
+            <ProtectedRoute>
+              <Handling />
+            </ProtectedRoute>
+          }
+        />
       </Route>
 
       <Route path="*" element={<Navigate to="/home/dashboard" replace />} />

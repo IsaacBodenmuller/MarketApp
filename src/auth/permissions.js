@@ -1,0 +1,28 @@
+export const PERMISSIONS = {
+  CREATE_USER: "CREATE_USER",
+  DELETE_USER: "DELETE_USER",
+  VIEW_USERS: "VIEW_USERS",
+  UPDATE_USERS: "UPDATE_USERS",
+  VIEW_DASHBOARD: "VIEW_DASHBOARD",
+  VIEW_ACCOUNT: "VIEW_ACCOUNT",
+};
+
+export const ROLE_PERMISSION = {
+  ADM: [
+    PERMISSIONS.CREATE_USER,
+    PERMISSIONS.DELETE_USER,
+    PERMISSIONS.UPDATE_USERS,
+    PERMISSIONS.VIEW_USERS,
+    PERMISSIONS.VIEW_DASHBOARD,
+    PERMISSIONS.VIEW_ACCOUNT,
+  ],
+  USER: [PERMISSIONS.VIEW_DASHBOARD, PERMISSIONS.VIEW_ACCOUNT],
+};
+
+export function hasPermission(user, permission) {
+  if (!user) return false;
+
+  const permissions = ROLE_PERMISSION[user.role] || [];
+
+  return permissions.includes(permission);
+}
