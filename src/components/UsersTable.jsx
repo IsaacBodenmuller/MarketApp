@@ -1,9 +1,15 @@
 import { useEffect, useState } from "react";
 import api from "../services/api";
 import { Pencil, Trash } from "lucide-react";
+import Message from "../modals/Message";
+import ModalUser from "../modals/User";
 
 export default function UsersTable({ reload }) {
   const [users, setUsers] = useState([]);
+  const [userToDelete, setUserToDelete] = useState(null);
+  const [showMessage, setShowMessage] = useState(false);
+  const [userToEdit, setUserToEdit] = useState(null);
+  const [showEditModal, setShowEditModal] = useState(false);
 
   useEffect(() => {
     const loadUsers = async () => {
@@ -18,14 +24,14 @@ export default function UsersTable({ reload }) {
     loadUsers();
   }, [reload]);
 
-  async function deleteUser(userId) {
-    const confirmDelete = window.confirm("excluir?");
-    if (!confirmDelete) return;
-
+  async function deleteUser() {
     try {
-      await api.delete(`/user/delete/${userId}`);
+      await api.delete(`/user/delete/${userToDelete}`);
 
-      setUsers((prev) => prev.filter((u) => u.Id !== userId));
+      setUsers((prev) => prev.filter((u) => u.Id !== userToDelete));
+
+      setShowMessage(false);
+      setUserToDelete(null);
     } catch (error) {
       console.error("Erro ao excluir usuário", error);
     }
@@ -64,10 +70,22 @@ export default function UsersTable({ reload }) {
               <td className="p-3">{user?.Role}</td>
               <td className="p-3">{user?.Active ? "Ativo" : "Inativo"}</td>
               <td className="p-3 flex justify-end gap-8">
-                <button>
+                <button
+                  className="cursor-pointer"
+                  onClick={() => {
+                    setUserToEdit(user);
+                    setShowEditModal(true);
+                  }}
+                >
                   <Pencil className="size-4 text-gray-600" />
                 </button>
-                <button onClick={() => deleteUser(user.Id)}>
+                <button
+                  className="cursor-pointer"
+                  onClick={() => {
+                    setUserToDelete(user.Id);
+                    setShowMessage(true);
+                  }}
+                >
                   <Trash className="size-4 text-red-600" />
                 </button>
               </td>
@@ -82,6 +100,28 @@ export default function UsersTable({ reload }) {
           )}
         </tbody>
       </table>
+      {showMessage && (
+        <Message
+          onClose={() => {
+            setShowMessage(false);
+            setUserToDelete(null);
+          }}
+          onSuccess={deleteUser}
+        />
+      )}
+      {showEditModal && (
+        <ModalUser
+          user={userToEdit}
+          onClose={() => {
+            setUserToEdit(null);
+            setShowEditModal(false);
+          }}
+          onSuccess={() => {
+            setShowEditModal(false);
+            setUserToEdit(null);
+          }}
+        />
+      )}
     </div>
   );
 }

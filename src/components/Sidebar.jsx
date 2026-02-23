@@ -311,7 +311,7 @@ export default function Sidebar() {
 
       <footer
         className={`border-t border-gray-700 p-2 flex items-center justify-between ${
-          collapsed && "flex-col"
+          collapsed && "flex-col gap-2"
         }`}
       >
         <div

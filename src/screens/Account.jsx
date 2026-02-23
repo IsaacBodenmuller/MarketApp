@@ -7,7 +7,7 @@ import Can from "../components/Can";
 import { PERMISSIONS } from "../auth/permissions";
 import UsersTable from "../components/UsersTable";
 import { useState } from "react";
-import NewUser from "../modals/NewUser";
+import ModalUser from "../modals/User";
 
 export default function Account() {
   const { user } = useAuth();
@@ -136,7 +136,7 @@ export default function Account() {
                     </span>
                   </div>
                   {addingUser && (
-                    <NewUser
+                    <ModalUser
                       onClose={() => setAddingUser(false)}
                       onSuccess={() => {
                         handleUserCreated();
