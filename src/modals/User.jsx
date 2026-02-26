@@ -90,47 +90,65 @@ export default function User({ onClose, onSuccess, user }) {
         )}
 
         <form onSubmit={handleSubmit} className="flex flex-col gap-3">
-          <TextInput
-            placeholder="Nome"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            isRequired={true}
-          />
+          <div className="flex flex-col gap-1">
+            <span className="text-xs font-medium">Nome</span>
+            <TextInput
+              placeholder="Nome"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              isRequired={true}
+            />
+          </div>
 
-          <TextInput
-            placeholder="Usuário"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            isRequired={true}
-          />
+          <div className="flex flex-col gap-1">
+            <span className="text-xs font-medium">Usuário</span>
+            <TextInput
+              placeholder="Usuário"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              isRequired={true}
+            />
+          </div>
 
-          <TextInput
-            placeholder="E-mail"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            isRequired={true}
-          />
+          <div className="flex flex-col gap-1">
+            <span className="text-xs font-medium">E-mail</span>
+            <TextInput
+              placeholder="E-mail"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              isRequired={true}
+            />
+          </div>
 
-          <SelectInput
-            value={profile}
-            onChange={(value) => setProfile(value)}
-          />
+          <div className="flex flex-col gap-1">
+            <span className="text-xs font-medium">Perfil</span>
+            <SelectInput
+              value={profile}
+              onChange={(value) => setProfile(value)}
+            />
+          </div>
 
           {!isToUpdate && (
             <div>
-              <PasswordInput
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                isRequired={true}
-                type="password"
-              />
+              <div className="flex flex-col gap-1">
+                <span className="text-xs font-medium">Senha</span>
+                <PasswordInput
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  isRequired={true}
+                  type="password"
+                />
+              </div>
 
-              <PasswordInput
-                value={passwordAgain}
-                onChange={(e) => setPasswordAgain(e.target.value)}
-                isRequired={true}
-                type="password"
-              />
+              <div className="flex flex-col gap-1">
+                <span className="text-xs font-medium">Confirmar Senha</span>
+                <PasswordInput
+                  value={passwordAgain}
+                  onChange={(e) => setPasswordAgain(e.target.value)}
+                  isRequired={true}
+                  type="password"
+                />
+              </div>
             </div>
           )}
           {isToUpdate ? (

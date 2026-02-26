@@ -5,10 +5,14 @@ export default function TextInput({
   value,
   onChange,
   isRequired = false,
+  disabled = false,
 }) {
   return (
-    <div className="flex border bg-gray-50 border-gray-300 rounded-md w-full h-8 text-gray-700 focus:outline-1 outline-gray-400 px-2 text-xs">
+    <div
+      className={`flex border bg-gray-50 border-gray-300 rounded-md w-full h-8 text-gray-700 focus:outline-1 outline-gray-400 px-2 text-xs ${disabled && "bg-slate-200"}`}
+    >
       <input
+        disabled={disabled}
         type={type}
         className="w-full outline-0 relative"
         placeholder={placeholder}

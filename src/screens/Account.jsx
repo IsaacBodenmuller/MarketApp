@@ -8,11 +8,13 @@ import { PERMISSIONS } from "../auth/permissions";
 import UsersTable from "../components/UsersTable";
 import { useState } from "react";
 import ModalUser from "../modals/User";
+import ForgetPassword from "../modals/ForgetPassword";
 
 export default function Account() {
   const { user } = useAuth();
   const [reloadUsers, setReloadUsers] = useState(0);
   const [addingUser, setAddingUser] = useState(false);
+  const [changingPassword, setChangingPassword] = useState(false);
 
   function handleUserCreated() {
     setReloadUsers((prev) => prev + 1);
@@ -70,13 +72,24 @@ export default function Account() {
                 <KeyRound className="size-4" />
                 <span className="text-xs">Senha: </span>
                 <span className="text-xs font-semibold">{"••••••••"}</span>
-                <span className="text-xs text-emerald-700 hover:underline cursor-pointer">
+                <span
+                  className="text-xs text-emerald-700 hover:underline cursor-pointer"
+                  onClick={() => setChangingPassword(true)}
+                >
                   Alterar
                 </span>
               </div>
             </div>
           </div>
         </Card>
+
+        {changingPassword && (
+          <ForgetPassword
+            email={user?.email}
+            onClose={() => setChangingPassword(false)}
+            onSuccess={() => setChangingPassword(false)}
+          />
+        )}
 
         <Card squareSize="w-[50%]">
           <div className="flex flex-col gap-4">
