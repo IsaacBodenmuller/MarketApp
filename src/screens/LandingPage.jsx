@@ -3,9 +3,11 @@ import Sidebar from "../components/Sidebar";
 
 export default function LandingPage() {
   return (
-    <div className="w-screen h-screen flex">
+    <div className="flex h-screen overflow-hidden">
       <Sidebar />
-      <Outlet />
+      <div className="flex-1 overflow-y-auto">
+        <Outlet />
+      </div>
     </div>
   );
 }

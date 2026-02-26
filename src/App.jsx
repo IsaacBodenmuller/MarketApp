@@ -25,7 +25,6 @@ export default function App() {
   return (
     <Routes>
       <Route path="/login" element={<Login />} />
-      {/* <Route path="/forgetpassword" element={<ForgetPassword />} /> */}
 
       <Route
         path="/home"

@@ -74,7 +74,7 @@ export default function User({ onClose, onSuccess, user }) {
   }
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center">
+    <div className="fixed inset-0 bg-black/50 flex items-center justify-center ">
       <div className="w-96 bg-white rounded-xl shadow-xl p-6 flex flex-col gap-4">
         <div className="flex justify-between">
           <h2 className="text-lg font-semibold">
@@ -129,7 +129,7 @@ export default function User({ onClose, onSuccess, user }) {
           </div>
 
           {!isToUpdate && (
-            <div>
+            <div className="flex flex-col gap-3">
               <div className="flex flex-col gap-1">
                 <span className="text-xs font-medium">Senha</span>
                 <PasswordInput
