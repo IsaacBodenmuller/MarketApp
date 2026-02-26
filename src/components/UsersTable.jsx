@@ -116,7 +116,13 @@ export default function UsersTable({ reload }) {
             setUserToEdit(null);
             setShowEditModal(false);
           }}
-          onSuccess={() => {
+          onSuccess={(updatedUser) => {
+            setUsers((prev) =>
+              prev.map((u) =>
+                u.Id === updatedUser.Id ? { ...u, ...updatedUser } : u,
+              ),
+            );
+
             setShowEditModal(false);
             setUserToEdit(null);
           }}

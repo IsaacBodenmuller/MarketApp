@@ -40,10 +40,11 @@ export default function User({ onClose, onSuccess, user }) {
       setError("");
 
       if (isToUpdate) {
-        await api.put("/user/update", {
+        await api.put(`/user/update/${user.Id}`, {
           name,
           username,
           email,
+          password,
           profile,
         });
       } else {
@@ -56,7 +57,14 @@ export default function User({ onClose, onSuccess, user }) {
         });
       }
 
-      if (onSuccess) onSuccess();
+      if (onSuccess)
+        onSuccess({
+          Id: user?.Id,
+          Username: username,
+          Name: name,
+          Email: email,
+          Profile: profile,
+        });
       if (onClose) onClose();
     } catch (err) {
       setError(`Erro: ${err}`);
