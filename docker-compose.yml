@@ -1,0 +1,36 @@
+version: "3.9"
+
+services:
+  postgres:
+    image: postgres:16
+    container_name: market_postgres
+    restart: always
+    environment:
+      POSTGRES_USER: marketuser
+      POSTGRES_PASSWORD: marketpass
+      POSTGRES_DB: marketdb
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  backend:
+    build: ./backend/Market.API
+    container_name: market_api
+    ports:
+      - "5000:8000"
+    depends_on:
+      - postgres
+    environment:
+      ConnectionStrings__DefaultConnection: Host=postgres;Port=5432;Database=marketdb;Username=marketuser;Password=marketpass
+
+  frontend:
+    build: ./frontend
+    container_name: market_frontend
+    ports:
+      - "5173:5173"
+    depends_on:
+      - backend
+
+volumes:
+  postgres_data:
