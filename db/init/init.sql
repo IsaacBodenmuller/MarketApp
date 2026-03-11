@@ -34,9 +34,9 @@ CREATE TABLE IF NOT EXISTS supplier (
 );
 
 -- ============================================================
--- SYSTEM USER
+-- USERS
 -- ============================================================
-CREATE TABLE IF NOT EXISTS system_user (
+CREATE TABLE IF NOT EXISTS users (
     id SERIAL PRIMARY KEY,
     name VARCHAR(30) NOT NULL,
     username VARCHAR(20) NOT NULL UNIQUE,
@@ -94,7 +94,7 @@ CREATE TABLE IF NOT EXISTS inventory_movement (
     user_id INT,
 
     FOREIGN KEY (product_id) REFERENCES product(id),
-    FOREIGN KEY (user_id) REFERENCES system_user(id)
+    FOREIGN KEY (user_id) REFERENCES users(id)
 );
 
 -- ============================================================
@@ -136,7 +136,7 @@ CREATE TABLE IF NOT EXISTS cash_register (
     withdrawal_amount NUMERIC(10,2) NOT NULL DEFAULT 0,
     deposit_amount NUMERIC(10,2) NOT NULL DEFAULT 0,
 
-    FOREIGN KEY (user_id) REFERENCES system_user(id)
+    FOREIGN KEY (user_id) REFERENCES users(id)
 );
 
 -- ============================================================
@@ -158,7 +158,7 @@ CREATE TABLE IF NOT EXISTS sale (
     cash_register_id INT NOT NULL,
 
     FOREIGN KEY (customer_id) REFERENCES customer(id),
-    FOREIGN KEY (user_id) REFERENCES system_user(id),
+    FOREIGN KEY (user_id) REFERENCES users(id),
     FOREIGN KEY (cash_register_id) REFERENCES cash_register(id)
 );
 
@@ -206,16 +206,16 @@ CREATE TABLE IF NOT EXISTS payment (
 );
 
 -- ============================================================
--- INDEXES (Performance)
+-- INDEXES
 -- ============================================================
 
-CREATE INDEX idx_product_category ON product(category_id);
-CREATE INDEX idx_product_supplier ON product(supplier_id);
+CREATE INDEX IF NOT EXIST idx_product_category ON product(category_id);
+CREATE INDEX IF NOT EXIST idx_product_supplier ON product(supplier_id);
 
-CREATE INDEX idx_sale_customer ON sale(customer_id);
-CREATE INDEX idx_sale_user ON sale(user_id);
+CREATE INDEX IF NOT EXIST idx_sale_customer ON sale(customer_id);
+CREATE INDEX IF NOT EXIST idx_sale_user ON sale(user_id);
 
-CREATE INDEX idx_sale_item_sale ON sale_item(sale_id);
-CREATE INDEX idx_sale_item_product ON sale_item(product_id);
+CREATE INDEX IF NOT EXIST idx_sale_item_sale ON sale_item(sale_id);
+CREATE INDEX IF NOT EXIST idx_sale_item_product ON sale_item(product_id);
 
-CREATE INDEX idx_inventory_product ON inventory_movement(product_id);
+CREATE INDEX IF NOT EXIST idx_inventory_product ON inventory_movement(product_id);
