@@ -23,7 +23,7 @@ services:
     depends_on:
       - postgres
     environment:
-      ConnectionStrings__DefaultConnection: Host=postgres;Port=5432;Database=marketdb;Username=marketuser;Password=marketpass
+      ConnectionStrings__DefaultConnection: Host=market_postgres;Port=5432;Database=marketdb;Username=marketuser;Password=marketpass
 
   frontend:
     build: ./frontend
