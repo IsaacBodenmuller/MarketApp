@@ -48,15 +48,15 @@ export default function Account() {
               </div>
               <div className="flex flex-col justify-center">
                 <Title>{user?.username}</Title>
-                {user?.role == "ADM" ? (
+                {user?.profile == "ADM" ? (
                   <div className="rounded-3xl bg-emerald-700 w-full h-5 items-center flex px-2 gap-1">
                     <Shield className="size-3 text-white" />
-                    <span className="text-white text-xs">{user?.profile}</span>
+                    <span className="text-white text-xs">Administrador</span>
                   </div>
                 ) : (
                   <div className="rounded-3xl bg-gray-300 w-full h-5 items-center flex px-2 gap-1">
                     <User className="size-3 text-gray-600" />
-                    <span className="text-xs">{user?.profile}</span>
+                    <span className="text-xs">Operador</span>
                   </div>
                 )}
               </div>
@@ -102,7 +102,7 @@ export default function Account() {
             <div className="flex flex-col gap-2">
               <div className="flex justify-between">
                 <span className="text-sm">Id do usuário</span>
-                <span className="text-sm text-gray-400">{user?.userId}</span>
+                <span className="text-sm text-gray-400">{user?.sub}</span>
               </div>
               <div className="flex justify-between">
                 <span className="text-sm">Perfil de acesso</span>
@@ -116,7 +116,7 @@ export default function Account() {
                       Inativo
                     </div>
                   ) : (
-                    <div className="h-5 w-full border rounded-3xl border-green-400 px-2 text-green-700">
+                    <div className="h-5 w-full flex items-center border rounded-3xl border-green-400 px-2 text-green-700">
                       Ativo
                     </div>
                   )}

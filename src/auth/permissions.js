@@ -22,7 +22,7 @@ export const ROLE_PERMISSION = {
 export function hasPermission(user, permission) {
   if (!user) return false;
 
-  const permissions = ROLE_PERMISSION[user.role] || [];
+  const permissions = ROLE_PERMISSION[user.profile] || [];
 
   return permissions.includes(permission);
 }

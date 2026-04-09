@@ -12,7 +12,7 @@ import Slogan from "../components/Slogan";
 
 export default function Login() {
   const [toSeePassword, setToSeePassword] = useState(false);
-  const [username, setUsername] = useState("");
+  const [user, setUser] = useState("");
   const [password, setPassword] = useState("");
   const [remember, setRemember] = useState(false);
   const [error, setError] = useState(null);
@@ -21,14 +21,14 @@ export default function Login() {
   const navigate = useNavigate();
 
   async function handleLogin() {
-    if (username === "" || password === "") {
+    if (user === "" || password === "") {
       setError("Necessário preencher usuário e senha");
       return;
     }
     try {
       setError(null);
 
-      await login(username, password, remember);
+      await login(user, password, remember);
 
       navigate("/home/dashboard");
     } catch (err) {
@@ -57,12 +57,12 @@ export default function Login() {
         </div>
         <div className="flex flex-col gap-4">
           <div className="flex flex-col text-start gap-2">
-            <span className="text-xs font-medium">Usuário</span>
+            <span className="text-xs font-medium">Usuário ou Email</span>
             <TextInput
               type="text"
               placeholder="Usuario_123"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
+              value={user}
+              onChange={(e) => setUser(e.target.value)}
             />
           </div>
           <div className="flex flex-col text-start gap-2">

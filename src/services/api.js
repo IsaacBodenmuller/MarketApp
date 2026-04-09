@@ -1,12 +1,12 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "http://localhost:8000",
+  baseURL: "https://localhost:7185",
   withCredentials: true,
 });
 
 const refreshApi = axios.create({
-  baseURL: "http://localhost:8000",
+  baseURL: "https://localhost:7185",
   withCredentials: true,
 });
 
@@ -38,7 +38,7 @@ api.interceptors.response.use(
 
       try {
         const res = await refreshApi.post("/auth/refresh");
-        accessToken = res.data.access_token;
+        accessToken = res.data.accessToken;
 
         originalRequest.headers.Authorization = `Bearer ${accessToken}`;
         return api(originalRequest);

@@ -14,8 +14,8 @@ export default function UsersTable({ reload }) {
   useEffect(() => {
     const loadUsers = async () => {
       try {
-        const response = await api.get("/user/getAll");
-        setUsers(response.data);
+        const response = await api.get("/api/v1/user/users");
+        setUsers(response.data.data);
       } catch (error) {
         console.error("Erro ao buscar usuários", error);
       }
@@ -53,22 +53,22 @@ export default function UsersTable({ reload }) {
 
         <tbody>
           {users?.map((user) => (
-            <tr key={user?.Id} className="border-t">
-              <td className="p-3">{user?.Username}</td>
-              <td className="p-3">{user?.Email}</td>
+            <tr key={user?.id} className="border-t">
+              <td className="p-3">{user?.username}</td>
+              <td className="p-3">{user?.email}</td>
               <td className="p-3">
-                {user?.Role == "ADM" ? (
+                {user?.profile == "ADM" ? (
                   <div className="rounded-xl bg-green-700 w-fit px-2 text-white text-xs">
-                    {user?.Profile}
+                    Administrador
                   </div>
                 ) : (
                   <div className="rounded-xl bg-gray-300 w-fit px-2 text-gray-700 text-xs">
-                    {user?.Profile}
+                    Operador
                   </div>
                 )}
               </td>
-              <td className="p-3">{user?.Role}</td>
-              <td className="p-3">{user?.Active ? "Ativo" : "Inativo"}</td>
+              <td className="p-3">{user?.profile}</td>
+              <td className="p-3">{user?.active ? "Ativo" : "Inativo"}</td>
               <td className="p-3 flex justify-end gap-8">
                 <button
                   className="cursor-pointer"
@@ -82,7 +82,7 @@ export default function UsersTable({ reload }) {
                 <button
                   className="cursor-pointer"
                   onClick={() => {
-                    setUserToDelete(user.Id);
+                    setUserToDelete(user.id);
                     setShowMessage(true);
                   }}
                 >
@@ -119,7 +119,7 @@ export default function UsersTable({ reload }) {
           onSuccess={(updatedUser) => {
             setUsers((prev) =>
               prev.map((u) =>
-                u.Id === updatedUser.Id ? { ...u, ...updatedUser } : u,
+                u.id === updatedUser.id ? { ...u, ...updatedUser } : u,
               ),
             );
 
