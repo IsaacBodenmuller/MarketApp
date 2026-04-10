@@ -14,6 +14,7 @@ import Categories from "./screens/Categories";
 import Customers from "./screens/Customers";
 import Suppliers from "./screens/Suppliers";
 import Handling from "./screens/Handling";
+import Profiles from "./screens/Profiles";
 
 export default function App() {
   const { loading } = useAuth();
@@ -84,6 +85,14 @@ export default function App() {
           element={
             <ProtectedRoute>
               <Handling />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="profiles"
+          element={
+            <ProtectedRoute>
+              <Profiles />
             </ProtectedRoute>
           }
         />

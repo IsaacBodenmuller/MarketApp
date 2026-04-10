@@ -75,17 +75,8 @@ export default function User({ onClose, onSuccess, user }) {
   }
 
   return (
-    // <div
-    //   className="fixed inset-0 bg-black/50 flex items-center justify-center "
-    //   ref={background}
-    //   onClick={handleBackgroundClick}
-    // >
-    //   <div
-    //     className="w-96 bg-white rounded-xl shadow-xl p-6 flex flex-col gap-4"
-    //     onClick={(e) => e.stopPropagation()}
-    //   >
     <BaseModal onClose={onClose}>
-      <div className="flex justify-between">
+      <div className="flex justify-between mb-2">
         <h2 className="text-lg font-semibold">
           {isToUpdate ? "Editar usuário" : "Novo usuário"}
         </h2>

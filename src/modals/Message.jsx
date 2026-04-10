@@ -1,8 +1,9 @@
 import { X } from "lucide-react";
+import BaseModal from "./base/BaseModal";
 
 export default function Message({ onClose, onSuccess }) {
   return (
-    <BaseModal onClose={onClose}>
+    <BaseModal onClose={onClose} width="max-w-96">
       <div className="flex justify-between">
         <h2 className="text-lg font-semibold">Deseja excluir o usuário?</h2>
         <X className="size-5 self-center cursor-pointer" onClick={onClose} />

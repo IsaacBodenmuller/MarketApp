@@ -5,15 +5,27 @@ const api = axios.create({
   withCredentials: true,
 });
 
-const refreshApi = axios.create({
-  baseURL: "https://localhost:7185",
-  withCredentials: true,
-});
+let accessToken = localStorage.getItem("accessToken");
 
-let accessToken = null;
+let isRefreshing = false;
+let failedQueue = [];
+
+const processQueue = (error, token = null) => {
+  failedQueue.forEach((prom) => {
+    if (error) prom.reject(error);
+    else prom.resolve(token);
+  });
+  failedQueue = [];
+};
 
 export const setToken = (token) => {
   accessToken = token;
+
+  if (token) {
+    localStorage.setItem("accessToken", token);
+  } else {
+    localStorage.removeItem("accessToken");
+  }
 };
 
 api.interceptors.request.use((config) => {
@@ -34,20 +46,47 @@ api.interceptors.response.use(
       !originalRequest.url.includes("/auth/login") &&
       !originalRequest.url.includes("/auth/refresh")
     ) {
-      originalRequest._retry = true;
-
-      try {
-        const res = await refreshApi.post("/auth/refresh");
-        accessToken = res.data.accessToken;
-
-        originalRequest.headers.Authorization = `Bearer ${accessToken}`;
-        return api(originalRequest);
-      } catch {
-        window.location.href = "/login";
+      if (isRefreshing) {
+        return new Promise((resolve, reject) => {
+          failedQueue.push({ resolve, reject });
+        })
+          .then((token) => {
+            originalRequest.headers.Authorization = `Bearer ${token}`;
+            return api(originalRequest);
+          })
+          .catch((err) => Promise.reject(err));
       }
-    }
 
-    return Promise.reject(error);
+      originalRequest._retry = true;
+      isRefreshing = true;
+
+      return new Promise((resolve, reject) => {
+        api
+          .post("/auth/refresh")
+          .then((res) => {
+            const newAccessToken = res.data.accessToken;
+
+            setToken(newAccessToken);
+
+            processQueue(null, newAccessToken);
+
+            originalRequest.headers.Authorization = `Bearer ${res.data.accessToken}`;
+            resolve(api(originalRequest));
+          })
+          .catch((err) => {
+            processQueue(err, null);
+
+            setToken(null);
+            localStorage.removeItem("accessToken");
+
+            window.location.href = "/login";
+            reject(err);
+          })
+          .finally(() => {
+            isRefreshing = false;
+          });
+      });
+    }
   },
 );
 
