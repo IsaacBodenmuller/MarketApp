@@ -14,7 +14,7 @@ import Categories from "./screens/Categories";
 import Customers from "./screens/Customers";
 import Suppliers from "./screens/Suppliers";
 import Handling from "./screens/Handling";
-import Profiles from "./screens/Profiles";
+// import Profiles from "./screens/Profiles";
 
 export default function App() {
   const { loading } = useAuth();
@@ -88,14 +88,14 @@ export default function App() {
             </ProtectedRoute>
           }
         />
-        <Route
+        {/* <Route
           path="profiles"
           element={
             <ProtectedRoute>
               <Profiles />
             </ProtectedRoute>
           }
-        />
+        /> */}
       </Route>
 
       <Route path="*" element={<Navigate to="/home/dashboard" replace />} />

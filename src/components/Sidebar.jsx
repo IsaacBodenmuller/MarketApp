@@ -20,6 +20,8 @@ import { NavLink } from "react-router-dom";
 import { useAuth } from "../context/useAuth";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
+import { PERMISSIONS } from "../auth/permissions";
+import Can from "./Can";
 
 export default function Sidebar() {
   const { user, logout } = useAuth();
@@ -307,39 +309,43 @@ export default function Sidebar() {
           </section>
         </div>
 
-        <div className="flex flex-col bg-gray-900 px-2 pt-6 pb-2 gap-8">
-          <section className="flex flex-col gap-2">
-            <div
-              className={`px-2 transition-all duration-200 ${
-                collapsed ? "opacity-0 h-0 overflow-hidden" : "opacity-100"
-              }`}
-            >
-              <SidebarSection>Conta</SidebarSection>
-            </div>
+        {
+          <Can permission={PERMISSIONS.VIEW_USERS}>
+            <div className="flex flex-col bg-gray-900 px-2 pt-6 pb-2 gap-8">
+              <section className="flex flex-col gap-2">
+                <div
+                  className={`px-2 transition-all duration-200 ${
+                    collapsed ? "opacity-0 h-0 overflow-hidden" : "opacity-100"
+                  }`}
+                >
+                  <SidebarSection>Conta</SidebarSection>
+                </div>
 
-            <NavLink
-              to="/home/profiles"
-              className={({ isActive }) =>
-                `flex items-center p-2 gap-4 rounded-lg transition-all duration-200 size-8 ${
-                  isActive
-                    ? "bg-gray-700 text-white"
-                    : "text-white hover:bg-gray-700"
-                } ${collapsed ? "self-center" : "w-full"}`
-              }
-            >
-              <PersonStanding className="size-4" />
-              <span
-                className={`text-xs transition-all duration-200 ${
-                  collapsed
-                    ? "opacity-0 w-0 overflow-hidden hidden"
-                    : "opacity-100 w-auto"
-                }`}
-              >
-                Perfis
-              </span>
-            </NavLink>
-          </section>
-        </div>
+                <NavLink
+                  to="/home/profiles"
+                  className={({ isActive }) =>
+                    `flex items-center p-2 gap-4 rounded-lg transition-all duration-200 size-8 ${
+                      isActive
+                        ? "bg-gray-700 text-white"
+                        : "text-white hover:bg-gray-700"
+                    } ${collapsed ? "self-center" : "w-full"}`
+                  }
+                >
+                  <PersonStanding className="size-4" />
+                  <span
+                    className={`text-xs transition-all duration-200 ${
+                      collapsed
+                        ? "opacity-0 w-0 overflow-hidden hidden"
+                        : "opacity-100 w-auto"
+                    }`}
+                  >
+                    Perfis
+                  </span>
+                </NavLink>
+              </section>
+            </div>
+          </Can>
+        }
       </div>
 
       {/* -------------------------------------------------------------------------------------------------------------------------- */}

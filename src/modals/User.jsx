@@ -21,10 +21,10 @@ export default function User({ onClose, onSuccess, user }) {
 
   useEffect(() => {
     if (user) {
-      setName(user.Name || "");
-      setUsername(user.Username || "");
-      setEmail(user.Email || "");
-      setProfile(user.Profile || "Operador");
+      setName(user.name || "");
+      setUsername(user.username || "");
+      setEmail(user.email || "");
+      setProfile(user.profile || "Operador");
     }
   }, [user]);
 
@@ -41,7 +41,7 @@ export default function User({ onClose, onSuccess, user }) {
       setError("");
 
       if (isToUpdate) {
-        await api.put(`/user/update/${user.Id}`, {
+        await api.put(`/api/v1/user/update/${user.Id}`, {
           name,
           username,
           email,
@@ -49,7 +49,7 @@ export default function User({ onClose, onSuccess, user }) {
           profile,
         });
       } else {
-        await api.post("/user/create", {
+        await api.post("/api/v1/user/create", {
           name,
           username,
           email,
@@ -60,11 +60,11 @@ export default function User({ onClose, onSuccess, user }) {
 
       if (onSuccess)
         onSuccess({
-          Id: user?.Id,
-          Username: username,
-          Name: name,
-          Email: email,
-          Profile: profile,
+          id: user?.Id,
+          username: username,
+          name: name,
+          email: email,
+          profile: profile,
         });
       if (onClose) onClose();
     } catch (err) {
