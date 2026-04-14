@@ -1,28 +1,9 @@
 import { useState, useEffect, useRef } from "react";
 import { ChevronDown } from "lucide-react";
 
-export default function SelectInput({ value, onChange }) {
+export default function SelectInput({ value, onChange, options = [] }) {
   const [open, setOpen] = useState(false);
   const wrapperRef = useRef(null);
-
-  const roles = [
-    {
-      value: "NO-ROLE",
-      label: "Operador",
-    },
-    {
-      value: "ADM",
-      label: "Administrador",
-    },
-  ];
-
-  useEffect(() => {
-    if (!value) {
-      onChange("NO-ROLE");
-    }
-  }, [value, onChange]);
-
-  const selected = roles.find((r) => r.value === value) || roles[0];
 
   useEffect(() => {
     function handleClickOutside(event) {
@@ -35,6 +16,8 @@ export default function SelectInput({ value, onChange }) {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+  const selected = options.find((opt) => opt.id === value);
+
   return (
     <div
       ref={wrapperRef}
@@ -45,22 +28,22 @@ export default function SelectInput({ value, onChange }) {
         onClick={() => setOpen(!open)}
         className="w-full h-full flex justify-between items-center outline-none cursor-pointer"
       >
-        <span>{selected.label}</span>
+        <span>{selected ? selected.name : "Selecione um perfil"}</span>
         <ChevronDown className="text-gray-400 size-4" />
       </button>
 
       {open && (
         <div className="absolute left-0 top-9 w-full bg-white border border-gray-300 rounded-md shadow-md z-50 text-xs">
-          {roles.map((role) => (
+          {options.map((opt) => (
             <div
-              key={role.value}
+              key={opt.id}
               onClick={() => {
-                onChange(role.value);
+                onChange(opt.id);
                 setOpen(false);
               }}
               className="px-2 py-2 cursor-pointer hover:bg-gray-100"
             >
-              {role.label}
+              {opt.name}
             </div>
           ))}
         </div>

@@ -14,17 +14,32 @@ export default function User({ onClose, onSuccess, user }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [passwordAgain, setPasswordAgain] = useState("");
-  const [profile, setProfile] = useState("Operador");
+
+  const [profiles, setProfiles] = useState([]);
+  const [profile, setProfile] = useState("");
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+
+  useEffect(() => {
+    const loadProfiles = async () => {
+      try {
+        const response = await api.get("/api/v1/profile/profiles");
+        setProfiles(response.data);
+        console.log(response.data);
+      } catch (error) {
+        console.error("Erro ao buscar perfis", error);
+      }
+    };
+    loadProfiles();
+  }, []);
 
   useEffect(() => {
     if (user) {
       setName(user.name || "");
       setUsername(user.username || "");
       setEmail(user.email || "");
-      setProfile(user.profile || "Operador");
+      setProfile(user.profile || "");
     }
   }, [user]);
 
@@ -57,15 +72,7 @@ export default function User({ onClose, onSuccess, user }) {
           profile,
         });
       }
-
-      if (onSuccess)
-        onSuccess({
-          id: user?.Id,
-          username: username,
-          name: name,
-          email: email,
-          profile: profile,
-        });
+      onSuccess();
       if (onClose) onClose();
     } catch (err) {
       setError(`Erro: ${err}`);
@@ -125,6 +132,7 @@ export default function User({ onClose, onSuccess, user }) {
           <SelectInput
             value={profile}
             onChange={(value) => setProfile(value)}
+            options={profiles}
           />
         </div>
 

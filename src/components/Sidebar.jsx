@@ -310,7 +310,7 @@ export default function Sidebar() {
         </div>
 
         {
-          <Can permission={PERMISSIONS.VIEW_USERS}>
+          <Can permission={PERMISSIONS.VIEW_PROFILES}>
             <div className="flex flex-col bg-gray-900 px-2 pt-6 pb-2 gap-8">
               <section className="flex flex-col gap-2">
                 <div

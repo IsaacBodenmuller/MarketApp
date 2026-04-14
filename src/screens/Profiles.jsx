@@ -1,40 +1,53 @@
 import { PERMISSIONS } from "../auth/permissions";
+import Card from "../components/Card";
+import Title from "../components/Title";
+import Can from "../components/Can";
+import { Plus } from "lucide-react";
+import BigText from "../components/BigText";
+import { useState } from "react";
+import Profile from "../modals/Profile";
+import ProfilesTable from "../components/ProfilesTable";
 
 export default function Profiles() {
+  const [reloadProfiles, setReloadProfiles] = useState(0);
+  const [addingProfile, setAddingProfile] = useState(false);
+
+  function handleProfileCreated() {
+    setReloadProfiles((prev) => prev + 1);
+  }
+
   return (
-    <div>
+    <div className="px-4 py-6">
       <Card squareSize="w-[100%]">
         <div className="flex flex-col gap-4">
           <div className="flex justify-between">
             <div className="flex flex-col gap-2">
-              <Title>Gerenciar Usuários</Title>
+              <BigText>Gerenciar Perfis de Usuário</BigText>
               <span className="text-xs font-extralight text-gray-500">
-                Cadastre e visualize os operadores do sistema
+                Cadastre e visualize os perfis dos operadores do sistema
               </span>
             </div>
-            <Can permission={PERMISSIONS.CREATE_USER}>
-              <div
-                className="h-10 flex items-center gap-4 px-4 rounded-lg bg-green-700 cursor-pointer"
-                onClick={() => setAddingUser(true)}
-              >
-                <Plus className="size-4 text-white" />
-                <span className="text-white text-sm font-semibold">
-                  Novo Usuário
-                </span>
-              </div>
-              {addingUser && (
-                <ModalUser
-                  onClose={() => setAddingUser(false)}
-                  onSuccess={() => {
-                    handleUserCreated();
-                    setAddingUser(false);
-                  }}
-                />
-              )}
-            </Can>
+            <div
+              className="h-10 flex items-center gap-4 px-4 rounded-lg bg-green-700 cursor-pointer"
+              onClick={() => setAddingProfile(true)}
+            >
+              <Plus className="size-4 text-white" />
+              <span className="text-white text-sm font-semibold">
+                Novo Perfil
+              </span>
+            </div>
+            {addingProfile && (
+              <Profile
+                onClose={() => setAddingProfile(false)}
+                onSuccess={() => {
+                  handleProfileCreated();
+                  setAddingProfile(false);
+                }}
+              />
+            )}
           </div>
 
-          <UsersTable reload={reloadUsers} />
+          <ProfilesTable reload={reloadProfiles} />
         </div>
       </Card>
     </div>
