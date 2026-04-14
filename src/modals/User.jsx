@@ -24,7 +24,7 @@ export default function User({ onClose, onSuccess, user }) {
   useEffect(() => {
     const loadProfiles = async () => {
       try {
-        const response = await api.get("/api/v1/profile/profiles");
+        const response = await api.get("/api/v1/profiles");
         setProfiles(response.data);
         console.log(response.data);
       } catch (error) {
@@ -50,30 +50,43 @@ export default function User({ onClose, onSuccess, user }) {
       setError("As senhas não coincidem");
       return;
     }
+    if (!profile) {
+      setError("Necessário escolher um perfil");
+      return;
+    }
 
     try {
       setLoading(true);
       setError("");
 
       if (isToUpdate) {
-        await api.put(`/api/v1/user/update/${user.Id}`, {
+        await api.put(`/api/v1/users/${user.Id}`, {
           name,
           username,
           email,
           password,
-          profile,
+          profileId: profile,
+        });
+        onSuccess({
+          name,
+          username,
+          email,
+          password,
+          profileId: profile,
         });
       } else {
-        await api.post("/api/v1/user/create", {
+        console.log(profile);
+        var response = await api.post("/api/v1/users", {
           name,
           username,
           email,
           password,
-          profile,
+          profileId: profile,
         });
+        console.log(response);
+        onSuccess();
       }
-      onSuccess();
-      if (onClose) onClose();
+      onClose();
     } catch (err) {
       setError(`Erro: ${err}`);
     } finally {

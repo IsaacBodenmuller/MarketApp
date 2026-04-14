@@ -1,7 +1,4 @@
-import { PERMISSIONS } from "../auth/permissions";
 import Card from "../components/Card";
-import Title from "../components/Title";
-import Can from "../components/Can";
 import { Plus } from "lucide-react";
 import BigText from "../components/BigText";
 import { useState } from "react";

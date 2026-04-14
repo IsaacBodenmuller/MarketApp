@@ -15,7 +15,7 @@ export default function UsersTable({ reload }) {
   useEffect(() => {
     const loadUsers = async () => {
       try {
-        const response = await api.get("/api/v1/user/users");
+        const response = await api.get("/api/v1/users");
         setUsers(response.data.data);
       } catch (error) {
         console.error("Erro ao buscar usuários", error);
@@ -27,7 +27,7 @@ export default function UsersTable({ reload }) {
 
   async function deleteUser() {
     try {
-      await api.delete(`/user/delete/${userToDelete}`);
+      await api.delete(`/users/delete/${userToDelete}`);
       setUsers((prev) => prev.filter((u) => u.id !== userToDelete));
 
       setShowMessage(false);

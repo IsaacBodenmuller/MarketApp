@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import api from "../services/api";
 import { Pencil, Trash } from "lucide-react";
 import Message from "../modals/Message";
-import ModalUser from "../modals/User";
 import Table from "../components/Table";
 import Profile from "../modals/Profile";
 
