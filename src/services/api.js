@@ -86,6 +86,8 @@ api.interceptors.response.use(
             isRefreshing = false;
           });
       });
+    } else {
+      return Promise.reject(error);
     }
   },
 );

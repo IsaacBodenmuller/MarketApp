@@ -28,12 +28,14 @@ export default function ProfilesTable({ reload }) {
   async function deleteProfile() {
     try {
       await api.delete(`/api/v1/profiles/${profileToDelete}`);
-      setProfiles((prev) => prev.filter((p) => p.id !== profileToDelete));
 
+      setProfiles((prev) => prev.filter((p) => p.id !== profileToDelete));
       setShowMessage(false);
       setProfileToDelete(null);
     } catch (error) {
       console.error("Erro ao excluir usuário", error);
+      setShowMessage(false);
+      setProfileToDelete(null);
     }
   }
 
