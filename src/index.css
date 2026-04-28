@@ -3,3 +3,16 @@
 * {
   font-family: sans-serif;
 }
+
+@keyframes shrink {
+  from {
+    width: 100%;
+  }
+  to {
+    width: 0%;
+  }
+}
+
+.animate-\[shrink_linear\] {
+  animation: shrink linear forwards;
+}

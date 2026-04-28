@@ -4,10 +4,12 @@ import BigText from "../components/BigText";
 import { useState } from "react";
 import Profile from "../modals/Profile";
 import ProfilesTable from "../components/ProfilesTable";
+import Toast from "../modals/Toast";
 
 export default function Profiles() {
   const [reloadProfiles, setReloadProfiles] = useState(0);
   const [addingProfile, setAddingProfile] = useState(false);
+  const [toast, setToast] = useState(null);
 
   function handleProfileCreated() {
     setReloadProfiles((prev) => prev + 1);
@@ -44,7 +46,15 @@ export default function Profiles() {
             )}
           </div>
 
-          <ProfilesTable reload={reloadProfiles} />
+          {toast && (
+            <Toast
+              type={toast.type}
+              message={toast.message}
+              onClose={() => setToast(null)}
+            />
+          )}
+
+          <ProfilesTable reload={reloadProfiles} showToast={setToast} />
         </div>
       </Card>
     </div>

@@ -5,7 +5,7 @@ import Message from "../modals/Message";
 import Table from "../components/Table";
 import Profile from "../modals/Profile";
 
-export default function ProfilesTable({ reload }) {
+export default function ProfilesTable({ reload, showToast }) {
   const [profiles, setProfiles] = useState([]);
   const [profileToDelete, setProfileToDelete] = useState(null);
   const [showMessage, setShowMessage] = useState(false);
@@ -30,10 +30,19 @@ export default function ProfilesTable({ reload }) {
       await api.delete(`/api/v1/profiles/${profileToDelete}`);
 
       setProfiles((prev) => prev.filter((p) => p.id !== profileToDelete));
-      setShowMessage(false);
-      setProfileToDelete(null);
+
+      showToast({
+        type: "success",
+        message: "Perfil excluído com sucesso",
+      });
     } catch (error) {
       console.error("Erro ao excluir usuário", error);
+
+      showToast({
+        type: "error",
+        message: "Erro ao excluir perfil",
+      });
+    } finally {
       setShowMessage(false);
       setProfileToDelete(null);
     }
