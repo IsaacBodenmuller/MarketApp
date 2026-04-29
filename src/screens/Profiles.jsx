@@ -41,6 +41,10 @@ export default function Profiles() {
                 onSuccess={() => {
                   handleProfileCreated();
                   setAddingProfile(false);
+                  setToast({
+                    type: "success",
+                    message: "Perfil criado com sucesso",
+                  });
                 }}
               />
             )}

@@ -28,7 +28,6 @@ export default function Profile({ onClose, onSuccess, profile }) {
         await api.put(`/api/v1/profiles/${profile.id}`, {
           name,
         });
-
         onSuccess({
           id: profile.id,
           name,

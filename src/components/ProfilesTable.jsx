@@ -108,7 +108,10 @@ export default function ProfilesTable({ reload, showToast }) {
                 u.id === updatedUser.id ? { ...u, ...updatedUser } : u,
               ),
             );
-
+            showToast({
+              type: "success",
+              message: "Perfil salvo com sucesso",
+            });
             setShowEditModal(false);
             setProfileToEdit(null);
           }}
