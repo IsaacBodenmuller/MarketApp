@@ -87,7 +87,7 @@ export default function Login() {
             Lembrar de mim
           </Checkbox>
         </div>
-        <Button color="green" textColor="text-white" onClick={handleLogin}>
+        <Button color="emerald" textColor="text-white" onClick={handleLogin}>
           Entrar
         </Button>
         {error && (

@@ -1,5 +1,5 @@
 const COLORS = {
-  green: "bg-emerald-700 hover:bg-emerald-800",
+  emerald: "bg-emerald-700 hover:bg-emerald-800",
 };
 
 export default function Button({ color, textColor, children, onClick }) {
