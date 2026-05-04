@@ -7,6 +7,7 @@ import Profile from "../modals/Profile";
 import ProfilesTable from "../components/ProfilesTable";
 import Toast from "../modals/Toast";
 import { PERMISSIONS } from "../auth/permissions";
+import ButtonIcon from "../components/ButtonIcon";
 
 export default function Profiles() {
   const [reloadProfiles, setReloadProfiles] = useState(0);
@@ -29,15 +30,13 @@ export default function Profiles() {
               </span>
             </div>
             <Can permission={PERMISSIONS.CREATE_PROFILE}>
-              <div
-                className="h-10 flex items-center gap-4 px-4 rounded-lg bg-green-700 cursor-pointer"
+              <ButtonIcon
+                color="green"
+                textColor="text-white"
+                icon={Plus}
+                children="Novo Perfil"
                 onClick={() => setAddingProfile(true)}
-              >
-                <Plus className="size-4 text-white" />
-                <span className="text-white text-sm font-semibold">
-                  Novo Perfil
-                </span>
-              </div>
+              />
             </Can>
             {addingProfile && (
               <Profile

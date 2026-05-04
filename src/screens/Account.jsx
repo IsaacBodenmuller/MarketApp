@@ -9,6 +9,7 @@ import UsersTable from "../components/UsersTable";
 import { useState } from "react";
 import ModalUser from "../modals/User";
 import ForgetPassword from "../modals/ForgetPassword";
+import ButtonIcon from "../components/ButtonIcon";
 
 export default function Account() {
   const { user } = useAuth();
@@ -139,15 +140,13 @@ export default function Account() {
                   </span>
                 </div>
                 <Can permission={PERMISSIONS.CREATE_USER}>
-                  <div
-                    className="h-10 flex items-center gap-4 px-4 rounded-lg bg-green-700 cursor-pointer"
+                  <ButtonIcon
+                    color="green"
+                    icon={Plus}
+                    textColor="text-white"
+                    children="Novo Usuário"
                     onClick={() => setAddingUser(true)}
-                  >
-                    <Plus className="size-4 text-white" />
-                    <span className="text-white text-sm font-semibold">
-                      Novo Usuário
-                    </span>
-                  </div>
+                  />
                   {addingUser && (
                     <ModalUser
                       onClose={() => setAddingUser(false)}
