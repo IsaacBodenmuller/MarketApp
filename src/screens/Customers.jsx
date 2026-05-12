@@ -4,8 +4,12 @@ import Card from "../components/Card";
 import Can from "../components/Can";
 import { PERMISSIONS } from "../auth/permissions";
 import ButtonIcon from "../components/ButtonIcon";
+import { useState } from "react";
+import ModalCustomer from "../modals/Customer";
 
 export default function Customers() {
+  const [addingCustomer, setAddingCustomer] = useState(false);
+
   return (
     <div className="flex flex-col py-6 px-4 gap-8 w-full">
       <div className="flex justify-between">
@@ -21,8 +25,20 @@ export default function Customers() {
             icon={Plus}
             textColor="text-white"
             children="Novo Cliente"
+            onClick={() => setAddingCustomer(true)}
           />
         </Can>
+
+        {addingCustomer && (
+          <ModalCustomer
+            onSuccess={() => {
+              setAddingCustomer(false);
+            }}
+            onClose={() => {
+              setAddingCustomer(false);
+            }}
+          />
+        )}
       </div>
 
       {/* vai ter pesquisa do nome ou cpf */}

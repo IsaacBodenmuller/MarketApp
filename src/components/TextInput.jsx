@@ -4,6 +4,7 @@ export default function TextInput({
   icon: IconComponent,
   value,
   onChange,
+  onBlur,
   isRequired = false,
   disabled = false,
 }) {
@@ -19,6 +20,7 @@ export default function TextInput({
         value={value}
         onChange={onChange}
         required={isRequired}
+        onBlur={onBlur}
       />
       <div className="right-0 relative cursor-pointer">
         {IconComponent && <IconComponent className="size-4" />}
