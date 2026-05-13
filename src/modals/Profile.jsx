@@ -25,7 +25,7 @@ export default function Profile({ onClose, onSuccess, profile }) {
       setError("");
 
       if (isToUpdate) {
-        await api.put(`/api/v1/profiles/${profile.id}`, {
+        await api.put(`/api/v1/profile/${profile.id}`, {
           name,
         });
         onSuccess({
@@ -33,7 +33,7 @@ export default function Profile({ onClose, onSuccess, profile }) {
           name,
         });
       } else {
-        await api.post("/api/v1/profiles", {
+        await api.post("/api/v1/profile", {
           name,
         });
         onSuccess();

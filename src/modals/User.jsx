@@ -24,7 +24,7 @@ export default function User({ onClose, onSuccess, user }) {
   useEffect(() => {
     const loadProfiles = async () => {
       try {
-        const response = await api.get("/api/v1/profiles");
+        const response = await api.get("/api/v1/profile");
         setProfiles(response.data);
         console.log(response.data);
       } catch (error) {
@@ -60,7 +60,7 @@ export default function User({ onClose, onSuccess, user }) {
       setError("");
 
       if (isToUpdate) {
-        await api.put(`/api/v1/users/${user.Id}`, {
+        await api.put(`/api/v1/user/${user.Id}`, {
           name,
           username,
           email,
@@ -76,7 +76,7 @@ export default function User({ onClose, onSuccess, user }) {
         });
       } else {
         console.log(profile);
-        var response = await api.post("/api/v1/users", {
+        var response = await api.post("/api/v1/user", {
           name,
           username,
           email,
@@ -146,6 +146,7 @@ export default function User({ onClose, onSuccess, user }) {
             value={profile}
             onChange={(value) => setProfile(value)}
             options={profiles}
+            placeholder={"Selecione um perfil"}
           />
         </div>
 

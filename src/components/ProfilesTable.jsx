@@ -15,7 +15,7 @@ export default function ProfilesTable({ reload, showToast }) {
   useEffect(() => {
     const loadProfiles = async () => {
       try {
-        const response = await api.get("/api/v1/profiles");
+        const response = await api.get("/api/v1/profile");
         setProfiles(response.data);
       } catch (error) {
         console.error("Erro ao buscar perfis", error);
@@ -27,7 +27,7 @@ export default function ProfilesTable({ reload, showToast }) {
 
   async function deleteProfile() {
     try {
-      await api.delete(`/api/v1/profiles/${profileToDelete}`);
+      await api.delete(`/api/v1/profile/${profileToDelete}`);
 
       setProfiles((prev) => prev.filter((p) => p.id !== profileToDelete));
 

@@ -6,6 +6,7 @@ import { PERMISSIONS } from "../auth/permissions";
 import ButtonIcon from "../components/ButtonIcon";
 import { useState } from "react";
 import ModalCustomer from "../modals/Customer";
+import CustomersTable from "../components/CustomersTable";
 
 export default function Customers() {
   const [addingCustomer, setAddingCustomer] = useState(false);
@@ -44,7 +45,9 @@ export default function Customers() {
       {/* vai ter pesquisa do nome ou cpf */}
 
       <div className="flex gap-8">
-        <Card squareSize="w-[100%]"></Card>
+        <Card squareSize="w-[100%]">
+          <CustomersTable></CustomersTable>
+        </Card>
       </div>
     </div>
   );

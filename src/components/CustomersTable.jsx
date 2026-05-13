@@ -53,6 +53,13 @@ export default function CustomersTable({ reload, showToast }) {
     { key: "cpf", label: "CPF" },
     { key: "phone", label: "Telefone" },
     { key: "email", label: "E-mail" },
+    { key: "cep", label: "CEP" },
+    { key: "address", label: "Rua" },
+    { key: "addressNumber", label: "Número" },
+    { key: "complement", label: "Complemento" },
+    { key: "neighborhood", label: "Bairro" },
+    { key: "city", label: "Cidade" },
+    { key: "state", label: "Estado" },
     {
       key: "active",
       label: "Status",

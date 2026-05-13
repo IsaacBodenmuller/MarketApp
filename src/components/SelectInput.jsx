@@ -1,7 +1,13 @@
 import { useState, useEffect, useRef } from "react";
 import { ChevronDown } from "lucide-react";
 
-export default function SelectInput({ value, onChange, options = [] }) {
+export default function SelectInput({
+  value,
+  onChange,
+  options = [],
+  placeholder,
+  scroll = false,
+}) {
   const [open, setOpen] = useState(false);
   const wrapperRef = useRef(null);
 
@@ -21,19 +27,23 @@ export default function SelectInput({ value, onChange, options = [] }) {
   return (
     <div
       ref={wrapperRef}
-      className="relative flex border bg-gray-50 border-gray-300 rounded-md w-full h-8 text-gray-700 px-2 text-xs items-center cursor-pointer"
+      className="relative flex border bg-gray-50 border-gray-300 rounded-md w-full h-8 text-gray-700 px-2 text-xs items-center cursor-pointe"
     >
       <button
         type="button"
         onClick={() => setOpen(!open)}
         className="w-full h-full flex justify-between items-center outline-none cursor-pointer"
       >
-        <span>{selected ? selected.name : "Selecione um perfil"}</span>
+        <span>{selected ? selected.name : `${placeholder}`}</span>
         <ChevronDown className="text-gray-400 size-4" />
       </button>
 
       {open && (
-        <div className="absolute left-0 top-9 w-full bg-white border border-gray-300 rounded-md shadow-md z-50 text-xs">
+        <div
+          className={`absolute left-0 top-9 w-full h-56 bg-white border border-gray-300 rounded-md shadow-md z-50 
+          text-xs ${scroll && "overflow-y-scroll"}
+          `}
+        >
           {options.map((opt) => (
             <div
               key={opt.id}

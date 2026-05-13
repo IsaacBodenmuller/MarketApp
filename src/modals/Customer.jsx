@@ -21,8 +21,36 @@ export default function Customer({ onClose, onSuccess, customer }) {
   const [state, setState] = useState("");
   const [neighborhood, setNeighborhood] = useState("");
 
+  const [cities, setCities] = useState([]);
+  const [states, setStates] = useState([]);
+
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+
+  useEffect(() => {
+    const loadStates = async () => {
+      try {
+        const response = await api.get("/api/v1/state");
+        setStates(response.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    const loadCities = async () => {
+      cities;
+      setCities();
+      try {
+        const response = await api.get("/api/v1/city");
+        setCities(response.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    loadStates();
+    loadCities();
+  }, []);
 
   useEffect(() => {
     if (customer) {
@@ -46,7 +74,7 @@ export default function Customer({ onClose, onSuccess, customer }) {
     if (!cep) return;
 
     if (cep.length !== 8) {
-      setError("O cep não contém 8 dígitos");
+      setError("O CEP não contém 8 dígitos");
       return;
     }
     try {
@@ -58,6 +86,7 @@ export default function Customer({ onClose, onSuccess, customer }) {
         return;
       }
 
+      setCep(data.cep);
       setAddress(data.logradouro || "");
       setCity(data.localidade || "");
       setState(data.estado || "");
@@ -69,12 +98,61 @@ export default function Customer({ onClose, onSuccess, customer }) {
     }
   };
 
+  const handleCpfChange = (e) => {
+    let cpf = e.target.value.replace(/\D/g, "");
+
+    cpf = cpf.slice(0, 11);
+
+    cpf = cpf
+      .replace(/^(\d{3})(\d)/, "$1.$2")
+      .replace(/^(\d{3})\.(\d{3})(\d)/, "$1.$2.$3")
+      .replace(/\.(\d{3})(\d)/, ".$1-$2");
+
+    setCpf(cpf);
+
+    if (error) {
+      setError("");
+    }
+  };
+
+  const handlePhoneChange = (e) => {
+    let phone = e.target.value.replace(/\D/g, "");
+
+    phone = phone.slice(0, 11);
+
+    phone = phone
+      .replace(/^(\d{2})(\d)/, "($1) $2")
+      .replace(/(\d{5})(\d)/, "$1-$2");
+
+    setPhone(phone);
+
+    if (error) {
+      setError("");
+    }
+  };
+
+  const handleStateChange = async (id) => {
+    try {
+      const response = await api.get(`/api/v1/city/state/${id}`);
+
+      setCities(response.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   async function handleSubmit(e) {
     e.preventDefault();
 
     try {
       setLoading(true);
       setError("");
+
+      const cleanCpf = cpf.replace(/\D/g, "");
+      if (cleanCpf.length !== 11) {
+        setError("O CPF não contém 11 dígitos");
+        return;
+      }
 
       const payload = {
         name,
@@ -91,14 +169,14 @@ export default function Customer({ onClose, onSuccess, customer }) {
       };
 
       if (isToUpdate) {
-        await api.put(`/api/v1/customers/${customer.id}`, payload);
+        await api.put(`/api/v1/customer/${customer.id}`, payload);
 
         onSuccess?.({
           ...payload,
           id: customer.id,
         });
       } else {
-        const response = await api.post("/api/v1/customers", payload);
+        const response = await api.post("/api/v1/customer", payload);
 
         onSuccess?.(response.data);
       }
@@ -125,7 +203,7 @@ export default function Customer({ onClose, onSuccess, customer }) {
         </div>
       )}
 
-      <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+      <form onSubmit={handleSubmit} className="flex flex-col gap-4 pt-2">
         <div className="grid grid-cols-2 gap-3">
           <div className="flex flex-col gap-1">
             <span className="text-xs font-medium">Nome</span>
@@ -142,7 +220,7 @@ export default function Customer({ onClose, onSuccess, customer }) {
             <TextInput
               placeholder="CPF"
               value={cpf}
-              onChange={(e) => setCpf(e.target.value)}
+              onChange={(e) => handleCpfChange(e)}
               isRequired={true}
             />
           </div>
@@ -154,7 +232,7 @@ export default function Customer({ onClose, onSuccess, customer }) {
             <TextInput
               placeholder="Telefone"
               value={phone}
-              onChange={(e) => setPhone(e.target.value)}
+              onChange={(e) => handlePhoneChange(e)}
               isRequired={true}
             />
           </div>
@@ -188,7 +266,7 @@ export default function Customer({ onClose, onSuccess, customer }) {
               placeholder="Rua"
               value={address}
               onChange={(e) => setAddress(e.target.value)}
-              disabled={true}
+              isRequired={true}
             />
           </div>
         </div>
@@ -221,27 +299,32 @@ export default function Customer({ onClose, onSuccess, customer }) {
               placeholder="Bairro"
               value={neighborhood}
               onChange={(e) => setNeighborhood(e.target.value)}
-              disabled={true}
-            />
-          </div>
-
-          <div className="flex flex-col gap-1">
-            <span className="text-xs font-medium">Cidade</span>
-            <TextInput
-              placeholder="Cidade"
-              value={city}
-              onChange={(e) => setCity(e.target.value)}
-              disabled={true}
+              isRequired={true}
             />
           </div>
 
           <div className="flex flex-col gap-1">
             <span className="text-xs font-medium">Estado</span>
-            <TextInput
-              placeholder="UF"
+            <SelectInput
               value={state}
-              onChange={(e) => setState(e.target.value)}
-              disabled={true}
+              options={states}
+              onChange={(value) => {
+                setState(value);
+                handleStateChange(value);
+              }}
+              placeholder={"Selecione um estado"}
+              scroll="true"
+            />
+          </div>
+
+          <div className="flex flex-col gap-1">
+            <span className="text-xs font-medium">Cidade</span>
+            <SelectInput
+              value={city}
+              options={cities}
+              onChange={(value) => setCity(value)}
+              placeholder={"Selecione uma cidade"}
+              scroll="true"
             />
           </div>
         </div>
