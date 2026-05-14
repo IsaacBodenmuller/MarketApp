@@ -7,9 +7,16 @@ import ButtonIcon from "../components/ButtonIcon";
 import { useState } from "react";
 import ModalCustomer from "../modals/Customer";
 import CustomersTable from "../components/CustomersTable";
+import Toast from "../modals/Toast";
 
 export default function Customers() {
   const [addingCustomer, setAddingCustomer] = useState(false);
+  const [reloadCustomers, setReloadCustomers] = useState(0);
+  const [toast, setToast] = useState(null);
+
+  function handleCustomerCreated() {
+    setReloadCustomers((prev) => prev + 1);
+  }
 
   return (
     <div className="flex flex-col py-6 px-4 gap-8 w-full">
@@ -33,11 +40,24 @@ export default function Customers() {
         {addingCustomer && (
           <ModalCustomer
             onSuccess={() => {
+              handleCustomerCreated();
               setAddingCustomer(false);
+              setToast({
+                type: "success",
+                message: "Cliente criado com sucesso",
+              });
             }}
             onClose={() => {
               setAddingCustomer(false);
             }}
+          />
+        )}
+
+        {toast && (
+          <Toast
+            type={toast.type}
+            message={toast.message}
+            onClose={() => setToast(null)}
           />
         )}
       </div>
@@ -46,7 +66,10 @@ export default function Customers() {
 
       <div className="flex gap-8">
         <Card squareSize="w-[100%]">
-          <CustomersTable></CustomersTable>
+          <CustomersTable
+            reload={reloadCustomers}
+            showToast={setToast}
+          ></CustomersTable>
         </Card>
       </div>
     </div>

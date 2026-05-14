@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import api from "../services/api";
 import TextInput from "../components/TextInput";
 import SelectInput from "../components/SelectInput";
-import PasswordInput from "../components/PasswordInput";
 import { X } from "lucide-react";
 import BaseModal from "./base/BaseModal";
 
@@ -68,6 +67,37 @@ export default function Customer({ onClose, onSuccess, customer }) {
     }
   }, [customer]);
 
+  const isValidCpf = (cpf) => {
+    cpf = cpf.replace(/\D/g, "");
+
+    if (cpf.length !== 11) return false;
+    if (/^(\d)\1+$/.test(cpf)) return false;
+
+    let sum = 0;
+    for (let i = 0; i < 9; i++) {
+      sum += Number(cpf[i]) * (10 - i);
+    }
+
+    let firstDigit = (sum * 10) % 11;
+    if (firstDigit === 10) firstDigit = 0;
+    if (firstDigit !== Number(cpf[9])) {
+      return false;
+    }
+
+    sum = 0;
+    for (let i = 0; i < 10; i++) {
+      sum += Number(cpf[i]) * (11 - i);
+    }
+
+    let secondDigit = (sum * 10) % 11;
+    if (secondDigit === 10) secondDigit = 0;
+    if (secondDigit !== Number(cpf[10])) {
+      return false;
+    }
+
+    return true;
+  };
+
   const onBlurCep = async (event) => {
     const cep = event.target.value.replace(/\D/g, "");
 
@@ -78,6 +108,8 @@ export default function Customer({ onClose, onSuccess, customer }) {
       return;
     }
     try {
+      setError("");
+
       const response = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
       const data = await response.json();
 
@@ -88,11 +120,18 @@ export default function Customer({ onClose, onSuccess, customer }) {
 
       setCep(data.cep);
       setAddress(data.logradouro || "");
-      setCity(data.localidade || "");
-      setState(data.estado || "");
       setNeighborhood(data.bairro || "");
 
-      console.log(data);
+      const cityResponse = await api.get(`api/v1/city/name/${data.localidade}`);
+      const cityData = cityResponse.data;
+
+      setCity(cityData.id || "");
+      setState(cityData.stateId || "");
+
+      const citiesResponse = await api.get(
+        `/api/v1/city/state/${cityData.stateId}`,
+      );
+      setCities(citiesResponse.data);
     } catch (error) {
       console.log("Erro ao buscar CEP", error);
     }
@@ -149,8 +188,13 @@ export default function Customer({ onClose, onSuccess, customer }) {
       setError("");
 
       const cleanCpf = cpf.replace(/\D/g, "");
-      if (cleanCpf.length !== 11) {
-        setError("O CPF não contém 11 dígitos");
+      if (!isValidCpf(cleanCpf)) {
+        setError("CPF inválido");
+        return;
+      }
+
+      if (!email.includes("@")) {
+        setError("O email é inválido");
         return;
       }
 
@@ -171,14 +215,13 @@ export default function Customer({ onClose, onSuccess, customer }) {
       if (isToUpdate) {
         await api.put(`/api/v1/customer/${customer.id}`, payload);
 
-        onSuccess?.({
+        onSuccess({
           ...payload,
           id: customer.id,
         });
       } else {
-        const response = await api.post("/api/v1/customer", payload);
-
-        onSuccess?.(response.data);
+        await api.post("/api/v1/customer", payload);
+        onSuccess(payload);
       }
     } catch (err) {
       console.log(err);

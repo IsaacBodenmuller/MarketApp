@@ -6,30 +6,31 @@ import Table from "../components/Table";
 import Profile from "../modals/Profile";
 
 export default function CustomersTable({ reload, showToast }) {
-  const [profiles, setProfiles] = useState([]);
-  const [profileToDelete, setProfileToDelete] = useState(null);
+  const [customers, setCustomers] = useState([]);
+  const [customerToDelete, setCustomerToDelete] = useState(null);
   const [showMessage, setShowMessage] = useState(false);
-  const [profileToEdit, setProfileToEdit] = useState(null);
+  const [customerToEdit, setCustomerToEdit] = useState(null);
   const [showEditModal, setShowEditModal] = useState(false);
 
   useEffect(() => {
-    const loadProfiles = async () => {
+    const loadCustomers = async () => {
       try {
-        const response = await api.get("/api/v1/customers");
-        setProfiles(response.data);
+        const response = await api.get("/api/v1/customer");
+        setCustomers(response.data);
+        console.log(response.data);
       } catch (error) {
         console.error("Erro ao buscar clientes", error);
       }
     };
 
-    loadProfiles();
+    loadCustomers();
   }, [reload]);
 
-  async function deleteProfile() {
+  async function deleteCustomer() {
     try {
-      await api.delete(`/api/v1/customers/${profileToDelete}`);
+      await api.delete(`/api/v1/customer/${customerToDelete}`);
 
-      setProfiles((prev) => prev.filter((p) => p.id !== profileToDelete));
+      setCustomers((prev) => prev.filter((p) => p.id !== customerToDelete));
 
       showToast({
         type: "success",
@@ -44,7 +45,7 @@ export default function CustomersTable({ reload, showToast }) {
       });
     } finally {
       setShowMessage(false);
-      setProfileToDelete(null);
+      setCustomerToDelete(null);
     }
   }
 
@@ -63,15 +64,15 @@ export default function CustomersTable({ reload, showToast }) {
     {
       key: "active",
       label: "Status",
-      render: (profile) => (profile.isActive ? "Ativo" : "Inativo"),
+      render: (customer) => (customer.isActive ? "Ativo" : "Inativo"),
     },
   ];
 
-  const renderActions = (profile) => (
+  const renderActions = (customer) => (
     <>
       <button
         onClick={() => {
-          setProfileToEdit(profile);
+          setCustomerToEdit(customer);
           setShowEditModal(true);
         }}
         className="cursor-pointer"
@@ -81,7 +82,7 @@ export default function CustomersTable({ reload, showToast }) {
 
       <button
         onClick={() => {
-          setProfileToDelete(profile.id);
+          setCustomerToDelete(customer.id);
           setShowMessage(true);
         }}
         className="cursor-pointer"
@@ -93,37 +94,37 @@ export default function CustomersTable({ reload, showToast }) {
 
   return (
     <>
-      <Table columns={columns} data={profiles} renderActions={renderActions} />
+      <Table columns={columns} data={customers} renderActions={renderActions} />
 
       {showMessage && (
         <Message
           onClose={() => {
             setShowMessage(false);
-            setProfileToDelete(null);
+            setCustomerToDelete(null);
           }}
-          onSuccess={deleteProfile}
+          onSuccess={deleteCustomer}
         />
       )}
 
       {showEditModal && (
         <Profile
-          profile={profileToEdit}
+          profile={customerToEdit}
           onClose={() => {
-            setProfileToEdit(null);
+            setCustomerToEdit(null);
             setShowEditModal(false);
           }}
-          onSuccess={(updatedUser) => {
-            setProfiles((prev) =>
+          onSuccess={(updatedCustomer) => {
+            setCustomers((prev) =>
               prev.map((u) =>
-                u.id === updatedUser.id ? { ...u, ...updatedUser } : u,
+                u.id === updatedCustomer.id ? { ...u, ...updatedCustomer } : u,
               ),
             );
             showToast({
               type: "success",
-              message: "Perfil salvo com sucesso",
+              message: "Cliente salvo com sucesso",
             });
             setShowEditModal(false);
-            setProfileToEdit(null);
+            setCustomerToEdit(null);
           }}
         />
       )}
