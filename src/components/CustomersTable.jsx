@@ -5,19 +5,36 @@ import Message from "../modals/Message";
 import Table from "../components/Table";
 import Profile from "../modals/Profile";
 
-export default function CustomersTable({ reload, showToast }) {
+export default function CustomersTable({ search, reload, showToast }) {
   const [customers, setCustomers] = useState([]);
+  const [filteredCustomers, setFilteredCustomers] = useState([]);
   const [customerToDelete, setCustomerToDelete] = useState(null);
   const [showMessage, setShowMessage] = useState(false);
   const [customerToEdit, setCustomerToEdit] = useState(null);
   const [showEditModal, setShowEditModal] = useState(false);
 
   useEffect(() => {
+    if (!search) {
+      setFilteredCustomers(customers);
+      return;
+    }
+    const searched = search.toLowerCase();
+
+    const filtered = customers.filter(
+      (customer) =>
+        customer.name.toLowerCase().includes(searched) ||
+        customer.cpf.replace(/\D/g, "").includes(searched),
+    );
+
+    setFilteredCustomers(filtered);
+  }, [search, customers]);
+
+  useEffect(() => {
     const loadCustomers = async () => {
       try {
         const response = await api.get("/api/v1/customer");
         setCustomers(response.data);
-        console.log(response.data);
+        setFilteredCustomers(response.data);
       } catch (error) {
         console.error("Erro ao buscar clientes", error);
       }
@@ -31,6 +48,9 @@ export default function CustomersTable({ reload, showToast }) {
       await api.delete(`/api/v1/customer/${customerToDelete}`);
 
       setCustomers((prev) => prev.filter((p) => p.id !== customerToDelete));
+      setFilteredCustomers((prev) =>
+        prev.filter((p) => p.id !== customerToDelete),
+      );
 
       showToast({
         type: "success",
@@ -94,7 +114,11 @@ export default function CustomersTable({ reload, showToast }) {
 
   return (
     <>
-      <Table columns={columns} data={customers} renderActions={renderActions} />
+      <Table
+        columns={columns}
+        data={filteredCustomers}
+        renderActions={renderActions}
+      />
 
       {showMessage && (
         <Message

@@ -1,4 +1,4 @@
-import { Plus } from "lucide-react";
+import { Plus, Search } from "lucide-react";
 import BigText from "../components/BigText";
 import Card from "../components/Card";
 import Can from "../components/Can";
@@ -13,6 +13,7 @@ export default function Customers() {
   const [addingCustomer, setAddingCustomer] = useState(false);
   const [reloadCustomers, setReloadCustomers] = useState(0);
   const [toast, setToast] = useState(null);
+  const [search, setSearch] = useState("");
 
   function handleCustomerCreated() {
     setReloadCustomers((prev) => prev + 1);
@@ -62,11 +63,23 @@ export default function Customers() {
         )}
       </div>
 
-      {/* vai ter pesquisa do nome ou cpf */}
+      <div className="flex border border-slate-300 rounded-md max-w-60">
+        <div className="w-full gap-2 flex p-1">
+          <Search className="size-4" />
+          <input
+            type="text"
+            className="w-full outline-0 text-sm text-slate-700"
+            placeholder="Buscar por nome ou CPF..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+          />
+        </div>
+      </div>
 
       <div className="flex gap-8">
         <Card squareSize="w-[100%]">
           <CustomersTable
+            search={search}
             reload={reloadCustomers}
             showToast={setToast}
           ></CustomersTable>
